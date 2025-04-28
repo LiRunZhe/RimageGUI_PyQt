@@ -1,0 +1,21 @@
+# Ignored files for RimageBatch project
+
+# Executable and build artifacts
+rimage.exe
+main.spec
+build/
+dist/
+
+# Python cache
+__pycache__/
+
+# Virtual environment
+.venv/
+venv/
+
+# Editor specific files
+.vscode/
+
+# Other potential temporary files
+*.pyc
+*.log
