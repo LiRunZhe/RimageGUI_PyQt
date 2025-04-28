@@ -48,7 +48,7 @@ class RimageGUI(QWidget):
         format_layout = QHBoxLayout()
         self.format_label = QLabel('输出格式：')
         self.format_combo = QComboBox()
-        self.format_combo.addItems(["jpg", "png", "oxipng", "jpegxl", "webp", "avif"])
+        self.format_combo.addItems(["jpg", "png", "oxipng", "jpeg_xl", "webp", "avif"])
         format_layout.addWidget(self.format_label)
         format_layout.addWidget(self.format_combo)
         layout.addLayout(format_layout)

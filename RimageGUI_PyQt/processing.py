@@ -44,8 +44,26 @@ class ImageProcessingTask(QRunnable):
 
             self.signals.message.emit(f"处理文件：{os.path.basename(self.file_path)} ({original_width} x {original_height}) -> ({new_width} x {new_height})")
 
-            new_file_name = os.path.splitext(os.path.basename(self.file_path))[0] + f".{self.output_format}"
-            new_file_path = os.path.join(self.output_dir, new_file_name)
+            # Determine the actual output directory
+            actual_output_dir = self.output_dir
+            if not actual_output_dir: # Check if output_dir is empty
+                actual_output_dir = os.path.dirname(self.file_path)
+                # Ensure the directory exists if using the source directory
+                if not os.path.exists(actual_output_dir):
+                     try:
+                         os.makedirs(actual_output_dir)
+                         self.signals.message.emit(f"创建输出目录：{actual_output_dir}")
+                     except Exception as e:
+                         self.signals.error.emit(f"创建输出目录失败：{e}")
+                         self.signals.finished.emit()
+                         return
+
+            # Construct the new file name with quality suffix
+            base_name = os.path.splitext(os.path.basename(self.file_path))[0]
+            new_file_name = f"{base_name}_q{self.output_quality}.{self.output_format}"
+
+            # Construct the full new file path
+            new_file_path = os.path.join(actual_output_dir, new_file_name)
 
             if os.path.exists(new_file_path):
                 self.signals.message.emit(f"文件 {new_file_name} 已存在，跳过。")
@@ -57,27 +75,24 @@ class ImageProcessingTask(QRunnable):
                 ]
 
                 # Add quality parameter based on format
-                if self.output_format == "jpg": # Specifically handle jpg
+                if self.output_format in ["jpg", "webp", "avif"]:
                     command.extend(["--quantization", str(self.output_quality)])
                     command.extend(["--quality", str(self.output_quality)])
-                elif self.output_format == "webp": # Specifically handle webp
+                elif self.output_format in ["jpeg_xl", "png", "oxipng"]:
                     command.extend(["--quantization", str(self.output_quality)])
-                    command.extend(["--quality", str(self.output_quality)]) # Assuming --quality is also needed/preferred
-                elif self.output_format == "avif": # Keep -q for avif (assuming it's correct for now)
-                    command.extend(["-q", str(self.output_quality)])
-                elif self.output_format in ["png", "oxipng", "jpegxl"]:
-                     command.extend(["--quantization", str(self.output_quality)]) # Assuming this is correct for these formats
 
                 # Add common parameters
                 command.extend([
                     "--dithering", "100",    # Assuming these are fixed based on the original script
                     "--resize", f"{new_width}x{new_height}", # Use --resize with widthxheight format
-                    "-d", self.output_dir, # Use -d for output directory
+                    "-d", actual_output_dir, # Use actual_output_dir for output directory
+                    "--suffix", f"_q{self.output_quality}", # Add quality suffix
                     self.file_path
                 ])
 
                 # Execute the rimage command
-                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                # Use CREATE_NO_WINDOW flag on Windows to hide the console window
+                process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
                 stdout, stderr = process.communicate()
 
                 if process.returncode != 0:

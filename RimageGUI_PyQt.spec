@@ -5,7 +5,7 @@ a = Analysis(
     ['RimageGUI_PyQt\\main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('rimage.exe', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
