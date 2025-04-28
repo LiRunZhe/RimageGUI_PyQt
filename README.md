@@ -17,7 +17,7 @@ Vibe Coding 自娱自乐项目，全程基于 Gemini-2.5-pro 以及 Gemini-2.5-f
 *   Python 3.x
 *   PyQt5
 *   Pillow (PIL)
-*   **`rimage.exe` 外部工具**: 本项目依赖于一个名为 `rimage.exe` 的外部命令行工具来执行实际的图片处理任务。请确保 `rimage.exe` 可执行文件位于系统的 PATH 环境变量中，或者将其放置在与 `main.py` 脚本相同的目录中。您可以从 [rimage 项目地址](https://github.com/your-rimage-repo) 获取 `rimage.exe`（请将此链接替换为实际的 rimage 项目地址）。
+*   **`rimage.exe` 外部工具**: 本项目依赖于一个名为 `rimage.exe` 的外部命令行工具来执行实际的图片处理任务。请确保 `rimage.exe` 可执行文件位于系统的 PATH 环境变量中，或者将其放置在与 `main.py` 脚本相同的目录中。您可以从 [rimage 项目地址](https://github.com/SalOne22/rimage) 获取 `rimage.exe`（请将此链接替换为实际的 rimage 项目地址）。
 
 ## 安装
 

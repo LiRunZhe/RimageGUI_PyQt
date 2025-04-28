@@ -1,3 +1,4 @@
+# 这是2023.12.28使用GPT4编写的PowerShell CLI脚本，是RimageGUI_PyQt的最初原型
 while ($true) {
     # Check if rimage.exe exists in the same directory as the script
     $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
